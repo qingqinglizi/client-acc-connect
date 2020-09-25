@@ -1,0 +1,9 @@
+jar包使用说明：
+1.本jar包作为第三方过滤器，使用时需要集成到项目中。
+其中自定义过滤器类名为AuthFilter，初始化时需为参数提供单点服务地址（例：http://localhost:2020/acc）与登录地址（例：http://localhost:2020/acc/login）
+2.必须添加依赖（版本号不定，依赖里有HttpClientBuilder类即可）
+        <dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.6</version>
+		</dependency>
