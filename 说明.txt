@@ -1,6 +1,56 @@
 jar包使用说明：
 1.本jar包作为第三方过滤器，使用时需要集成到项目中。
-其中自定义过滤器类名为AuthFilter，初始化时需为参数提供单点服务地址（例：http://localhost:2020/acc）与登录地址（例：http://localhost:2020/acc/login）
+其中自定义过滤器类名为AuthFilter，初始化时需为参数提供单点服务地址与登录地址
+（例：
+    写一个配置类配置jar包中的过滤器
+    例如：
+    package com.demo.springbootdemothree.config;
+
+    import acc.AuthFilter;
+    import org.springframework.beans.factory.annotation.Value;
+    import org.springframework.boot.web.servlet.FilterRegistrationBean;
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.Configuration;
+    import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+    /**
+     * @Author: Lee
+     * @Date 2020/6/19 16:16
+     * @Description:
+     */
+    @Configuration
+    public class WebConfig extends WebMvcConfigurerAdapter {
+
+        @Value("${acc.service}")
+        private String accServiceUrl;
+
+        @Value("${acc.login}")
+        private String accLoginUrl;
+
+        @Bean
+        public FilterRegistrationBean timeFilter() {
+
+            // 过滤器注册器
+            FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+
+            // 第三方过滤器
+            AuthFilter authFilter = new AuthFilter("我叫过滤器", "UTF-8", accLoginUrl, accServiceUrl);
+            registrationBean.setFilter(authFilter);
+
+    //        // 过滤路径
+    //        List<String> urls = new ArrayList<>();
+    //        urls.add("/*");
+    //        registrationBean.setUrlPatterns(urls);
+
+            return registrationBean;
+
+        }
+    }
+
+    其次，配置单点地址，如下：
+    单点服务地址：acc.service=http://localhost:2020/acc
+    登录地址：acc.login=http://localhost:2020/acc/login
+    ）
 2.必须添加依赖（版本号不定，依赖里有HttpClientBuilder类即可）
         <dependency>
 			<groupId>org.apache.httpcomponents</groupId>
